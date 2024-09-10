@@ -1,0 +1,2 @@
+fluent-logger==0.11.1
+stomp.py==8.1.2
