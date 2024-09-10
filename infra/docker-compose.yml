@@ -1,0 +1,35 @@
+services:
+  brocker:
+    image: "apache/activemq-artemis"
+    container_name: podips-brocker
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    env_file:
+      - .env
+    volumes:
+      - ./activemq/artemis-instance:/var/lib/artemis-instance
+
+  producer:
+    build: ../services/mock-producer
+    container_name: podips-mock-producer
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    depends_on:
+      - brocker
+
+  consumer:
+    build: ../services/mock-consumer
+    container_name: podips-mock-consumer
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    depends_on:
+      - brocker
